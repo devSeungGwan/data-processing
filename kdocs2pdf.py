@@ -4,6 +4,8 @@ import os
 from tqdm import tqdm
 
 def docx2pdf(path_input, path_output):
+    path_input, path_output = os.path.abspath(path_input), os.path.abspath(path_output)
+
     word = win32.Dispatch("Word.Application")    
     doc = word.Documents.Open(path_input)
     doc.SaveAs(path_output, FileFormat=17)
@@ -12,6 +14,8 @@ def docx2pdf(path_input, path_output):
     print("export: {}".format(path_output))
 
 def hwp2pdf(path_input, path_output):
+    path_input, path_output = os.path.abspath(path_input), os.path.abspath(path_output)
+    
     hwp = win32.gencache.EnsureDispatch("HWPFrame.HwpObject")
     hwp.RegisterModule("FilePathCheckDLL", "FilePathCheckerModule")
     hwp.XHwpWindows.Item(0).Visible = True
@@ -32,8 +36,8 @@ if __name__ == "__main__":
     dir_folder = sys.argv[2]
 
     lst_docs = [doc for doc in os.listdir(dir_folder) if form in doc]
-
     for doc in tqdm(lst_docs):
+        
         if form == "hwp":
             hwp2pdf(
                 path_input=os.path.join(dir_folder, doc),
